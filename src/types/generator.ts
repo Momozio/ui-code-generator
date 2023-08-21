@@ -26,7 +26,7 @@ export type IComponent = {
   /** 组件名 */
   name: string;
   /** 组件类型 */
-  componentType?:string,
+  componentType?: string;
   /** 唯一key */
   key: string;
   /** 组件预览渲染方法 */
@@ -34,9 +34,11 @@ export type IComponent = {
   /** 组件渲染方法 */
   render?: Component;
   /** 行内样式 */
-  style: {[key: string]: any};
+  style: { [key: string]: any };
+  /** 预览样式 */
+  previewStyle?: { [key: string]: any };
   /** 组件内文字 */
-  innerText?: string,
+  innerText?: string;
   /** 样式 */
   classDefine: { className: string; value: string }[];
   /** 组件属性 */
@@ -44,5 +46,5 @@ export type IComponent = {
   /** 子组件 */
   children?: IComponent[];
   /** 插槽 */
-  slot?: {[key:string]:IComponent|IComponent[]|null};
+  slot?: { [key: string]: IComponent | IComponent[] | null | string };
 };

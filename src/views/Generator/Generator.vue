@@ -42,6 +42,7 @@
           >
             <!-- 渲染内容 -->
             <renderItem :config="element" />
+
             <!-- 工具 -->
             <div
               class="tool-box"
@@ -50,7 +51,27 @@
                 (!isMove && hoverElementId == element.id)
               "
             >
+              <!-- 组件名 -->
               <div class="tip">{{ element.name }}</div>
+              <!-- 右侧按钮 -->
+              <!-- <div class="right-tool-box">
+                <div class="right-tool-item">
+                  <el-tooltip
+                    effect="dark"
+                    content="插槽"
+                    placement="top-start"
+                  >
+                    <i class="iconfont icon-shadow"></i>
+                  </el-tooltip>
+                </div>
+              </div> -->
+              <!-- 插槽面板 -->
+              <!-- <div class="slot-panel">
+                <div class="slot-title">组件插槽</div>
+                <div v-for="(slot, key) in element.slot">
+                  {{ key }}:{{ slot.key }}
+                </div>
+              </div> -->
             </div>
           </div>
         </template>
@@ -75,7 +96,31 @@ const leftComponentList = reactive<IComponent[]>(
     };
   })
 );
-const renderComponentList = reactive<IComponent[]>([]);
+const renderComponentList = reactive<IComponent[]>([
+  {
+    id: "0",
+    key: "el-row",
+    name: "行",
+    componentConfig: [],
+    style: [],
+    slot: {
+      default: {
+        id: "1",
+        key: "el-col",
+        componentConfig: [],
+        style: [],
+        slot: {
+          default: {
+            key: "el-button",
+            componentConfig: [],
+            innerText: "hello",
+          },
+        },
+      },
+    },
+  },
+]);
+
 
 /** 点击添加组件 */
 const addComponent = (component: IComponent) => {
@@ -88,7 +133,7 @@ const cloneElement = (component: IComponent) => {
   let com = deepcopy(component);
   com.id = uuidv4();
   currentElementId.value = com.id;
-  console.log(component)
+  console.log(component);
   return com;
 };
 
@@ -139,17 +184,55 @@ const isMove = ref<boolean>(false);
         position: relative;
         box-sizing: border-box;
         width: fit-content;
-        .tip {
-          z-index: 100;
-          position: absolute;
-          top: -24px;
-          height: 24px;
-          font-size: 14px;
-          color: #fff;
-          line-height: 24px;
-          padding: 0 8px;
-          background-color: #c21cffbc;
-          white-space: nowrap;
+
+        // 工具
+        .tool-box {
+          // 组件名
+          .tip {
+            z-index: 100;
+            position: absolute;
+            top: -24px;
+            height: 24px;
+            font-size: 14px;
+            color: #fff;
+            line-height: 24px;
+            padding: 0 8px;
+            background-color: #c21cffbc;
+            white-space: nowrap;
+            border-radius: 4px 4px 0 0;
+          }
+          // 右侧按钮
+          .right-tool-box {
+            position: absolute;
+            top: -24px;
+            height: 24px;
+            right: 0;
+            padding: 0 4px;
+            background-color: #c21cffbc;
+            border-radius: 4px 4px 0 0;
+            .right-tool-item {
+              i {
+                font-size: 14px;
+                color: #fff;
+                line-height: 24px;
+              }
+            }
+          }
+          // 插槽面板
+          .slot-panel {
+            position: absolute;
+            width: 200px;
+            height: 50px;
+            background-color: #fff;
+            box-shadow: var(--el-box-shadow-lighter);
+            z-index: 1;
+            top: 0;
+            opacity: 0.8;
+            padding: 8px;
+            .slot-title {
+              font-size: 14px;
+            }
+          }
         }
         &.highlight {
           &::after {
@@ -159,7 +242,7 @@ const isMove = ref<boolean>(false);
             left: 0;
             width: 100%;
             height: 100%;
-            border: 2px solid #c21cff;
+            border: 1px solid #c21cff;
             box-sizing: border-box;
             border-radius: 3px;
           }
@@ -172,7 +255,7 @@ const isMove = ref<boolean>(false);
             left: 0;
             width: 100%;
             height: 100%;
-            border: 2px dashed #c21cff;
+            border: 1px dashed #c21cff;
             box-sizing: border-box;
             border-radius: 3px;
           }
@@ -190,71 +273,6 @@ const isMove = ref<boolean>(false);
             visibility: visible;
             opacity: 1;
             transition: all 0.2s ease;
-          }
-        }
-        // &:active {
-        //   .render-item-info-wrap {
-        //     opacity: 0 !important;
-        //     padding-top: 5px !important;
-        //     transition: all 0.2s ease !important;
-        //   }
-        // }
-        // 组件信息
-        .render-item-info-wrap {
-          opacity: 0;
-          padding-top: 5px;
-          position: absolute;
-          z-index: 1000;
-          min-width: 200px;
-          visibility: hidden;
-
-          .render-item-info-box {
-            border: 1px solid var(--el-border-color-light);
-            box-shadow: var(--el-box-shadow-light);
-            border-radius: 4px;
-            background-color: #fff;
-            padding: 8px 12px;
-            // 组件名
-            .info-name {
-              font-size: 12px;
-              .tip {
-                color: rgb(3, 3, 124);
-                margin-right: 2px;
-              }
-            }
-            // 组件key
-            .info-key {
-              font-size: 12px;
-              .tip {
-                color: rgb(107, 5, 60);
-                margin-right: 2px;
-              }
-            }
-            // 小三角形
-            .arrow {
-              z-index: 1;
-              position: absolute;
-              left: 12px;
-              width: 10px;
-              height: 10px;
-              top: 0px;
-              &::before {
-                position: absolute;
-                width: 10px;
-                height: 10px;
-                z-index: -1;
-                content: " ";
-                transform: rotate(45deg);
-                background: var(--el-bg-color-overlay);
-                box-sizing: border-box;
-                border-bottom-color: transparent !important;
-                border-right-color: transparent !important;
-                border-top-left-radius: 2px;
-                border: 1px solid var(--el-border-color-light);
-                background: var(--el-bg-color-overlay);
-                right: 0;
-              }
-            }
           }
         }
       }

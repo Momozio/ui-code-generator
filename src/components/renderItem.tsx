@@ -19,7 +19,9 @@ export function renderItem({ config }: IrenderItemProps): VNode | null {
   // 处理 props
   const componentProps = processProps(config.componentConfig);
   // 处理 style
-  // processStyle(config.style)
+  if(config.style){
+    componentProps.style = config.style
+  }
 
   // 处理子组件
   let subComponents: (VNode | string)[] = [];

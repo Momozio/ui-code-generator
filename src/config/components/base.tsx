@@ -20,7 +20,7 @@ export const registerBaseComponent = () => {
     componentType: type,
     preview: () => <ElButton type="primary">按钮</ElButton>,
     render: ElButton,
-    innerText:'按钮',
+    innerText: "按钮",
     style: {},
     classDefine: [],
     componentConfig: [
@@ -42,19 +42,24 @@ export const registerBaseComponent = () => {
 
   // 行布局
   componentStore.register({
-    name: "el-row",
+    name: "行",
     key: "el-row",
     componentType: type,
     preview: () => <ElRow></ElRow>,
     render: ElRow,
     style: {},
+    previewStyle: {},
     classDefine: [],
     componentConfig: [],
+    children:[],
+    slot: {
+      default: '',
+    },
   });
 
   // 列布局
   componentStore.register({
-    name: "el-col",
+    name: "列",
     key: "el-col",
     componentType: type,
     preview: () => <ElCol></ElCol>,
@@ -62,6 +67,9 @@ export const registerBaseComponent = () => {
     style: {},
     classDefine: [],
     componentConfig: [],
+    slot: {
+      default: "",
+    },
   });
 
   // 链接
@@ -71,7 +79,7 @@ export const registerBaseComponent = () => {
     componentType: type,
     preview: () => <ElLink />,
     render: ElLink,
-    innerText:'链接',
+    innerText: "链接",
     style: {},
     classDefine: [],
     componentConfig: [],
