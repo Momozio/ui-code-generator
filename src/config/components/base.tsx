@@ -48,12 +48,15 @@ export const registerBaseComponent = () => {
     preview: () => <ElRow></ElRow>,
     render: ElRow,
     style: {},
-    previewStyle: {},
+    previewStyle: {
+      "min-height": "20px",
+      border: "1px dashed blue",
+    },
     classDefine: [],
     componentConfig: [],
-    children:[],
+    children: [],
     slot: {
-      default: '',
+      default: "",
     },
   });
 
@@ -65,6 +68,11 @@ export const registerBaseComponent = () => {
     preview: () => <ElCol></ElCol>,
     render: ElCol,
     style: {},
+    children: [],
+    previewStyle: {
+      "min-height": "20px",
+      border: "1px dashed red",
+    },
     classDefine: [],
     componentConfig: [],
     slot: {

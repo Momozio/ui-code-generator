@@ -16,6 +16,7 @@
     "element-plus": "^2.3.7",
     "highlight.js": "^11.8.0",
     "markdown-it": "^13.0.1",
+    "pinia": "^2.1.6",
     "prismjs": "^1.29.0",
     "uuid": "^9.0.0",
     "vue": "^3.3.4",

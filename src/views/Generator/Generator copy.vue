@@ -17,29 +17,43 @@
     </div>
 
     <!-- 渲染区 -->
-    <div class="render-main" @dblclick="generatorStore.handleSelectElement('')">
+    <div class="render-main" @dblclick="selectElement('')">
       <draggable
         class="list-group"
         :list="renderComponentList"
         group="componentsGroup"
         item-key="id"
-        @start="generatorStore.isMove = true"
-        @end="generatorStore.isMove = false"
+        @start="isMove = true"
+        @end="isMove = false"
       >
         <template #item="{ element }">
           <div
+            class="render-item"
+            @mousedown.stop="selectElement(element.id)"
+            @mouseleave="hoverElement('')"
+            @mouseover.stop="hoverElement(element.id)"
             :class="{
-              highlight: generatorStore.currentElementId == element.id,
+              highlight: currentElementId == element.id,
               'hover-highlight':
-                !generatorStore.isMove &&
-                generatorStore.hoverElementId == element.id &&
-                generatorStore.currentElementId != element.id,
+                !isMove &&
+                hoverElementId == element.id &&
+                currentElementId != element.id,
             }"
           >
             <!-- 渲染内容 -->
             <renderItem :config="element" />
 
-           
+            <!-- 工具 -->
+            <div
+              class="tool-box"
+              v-if="
+                (currentElementId == element.id && hoverElementId == '') ||
+                (!isMove && hoverElementId == element.id)
+              "
+            >
+              <!-- 组件名 -->
+              <div class="tip">{{ element.name }}</div>
+            </div>
           </div>
         </template>
       </draggable>
@@ -55,11 +69,6 @@ import { componentList } from "@/config/componentStore";
 import deepcopy from "deepcopy";
 import draggable from "vuedraggable";
 import { v4 as uuidv4 } from "uuid";
-import { useGeneratorStore } from "@/store/generator";
-
-// store
-const generatorStore = useGeneratorStore();
-
 const leftComponentList = reactive<IComponent[]>(
   componentList.map((c) => {
     return {
@@ -68,7 +77,9 @@ const leftComponentList = reactive<IComponent[]>(
     };
   })
 );
-const renderComponentList = reactive<IComponent[]>([]);
+const renderComponentList = reactive<IComponent[]>([
+ 
+]);
 
 /** 点击添加组件 */
 const addComponent = (component: IComponent) => {
@@ -80,10 +91,25 @@ const addComponent = (component: IComponent) => {
 const cloneElement = (component: IComponent) => {
   let com = deepcopy(component);
   com.id = uuidv4();
-  generatorStore.currentElementId = com.id;
+  currentElementId.value = com.id;
+  console.log(component);
   return com;
 };
 
+/** 当前选中的组件 */
+const currentElementId = ref<string>("");
+/** 点选组件 */
+const selectElement = (cId: string) => {
+  currentElementId.value = cId;
+};
+/** 当前选中的组件 */
+const hoverElementId = ref<string>("");
+/** 鼠标悬浮组件 */
+const hoverElement = (cId: string) => {
+  hoverElementId.value = cId;
+};
+/** 是否正在移动 */
+const isMove = ref<boolean>(false);
 </script>
 
 <style lang="scss" scoped>
@@ -175,7 +201,7 @@ const cloneElement = (component: IComponent) => {
           //   left: -1px;
           //   width: 100%;
           //   height: 100%;
-          border: 1px solid #c21cff;
+            border: 1px solid #c21cff;
           //   box-sizing: border-box;
           //   border-radius: 3px;
           //   z-index: -1;
@@ -189,9 +215,9 @@ const cloneElement = (component: IComponent) => {
           //   left: 0;
           //   width: 100%;
           //   height: 100%;
-          border: 1px dashed #c21cff;
-          // box-sizing: border-box;
-          // border-radius: 3px;
+            border: 1px dashed #c21cff;
+            // box-sizing: border-box;
+            // border-radius: 3px;
           // }
         }
         // &::after {

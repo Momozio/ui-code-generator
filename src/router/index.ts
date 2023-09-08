@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 import Generator from "@/views/Generator/Generator.vue";
+import Test from "@/views/Test.vue";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
@@ -8,6 +9,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/generator",
     component: Generator,
+  },
+  {
+    path: "/test",
+    component: Test,
   },
   {
     path: "/ai-chat",
